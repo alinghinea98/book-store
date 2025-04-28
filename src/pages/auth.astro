@@ -1,0 +1,11 @@
+---
+import AuthForm from '../components/Auth';
+import Layout from '../layouts/Layout.astro';
+import '../styles/auth.css';
+---
+
+<Layout title="Login/Register - Book Store">
+  <main>
+    <AuthForm client:load />
+  </main>
+</Layout>
