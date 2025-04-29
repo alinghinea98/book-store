@@ -1,4 +1,4 @@
-import { createSignal, type Component } from "solid-js";
+import { createSignal, type Component, Show } from "solid-js";
 
 const BooksStore: Component = () => {
   const [cart, setCart] = createSignal<number[]>([]);
@@ -41,21 +41,39 @@ const BooksStore: Component = () => {
             <div class="book-info">
               <h3>{book.title}</h3>
               <p class="author">{book.author}</p>
-              <button
-                class="add-to-cart"
-                onClick={() => handleAddToCart(book.id)}
-                disabled={cart().includes(book.id)}
+              <Show
+                when={!cart().includes(book.id)}
+                fallback={
+                  <button class="add-to-cart" disabled>
+                    In Cart
+                  </button>
+                }
               >
-                {cart().includes(book.id) ? "In Cart" : "Add to Cart"}
-              </button>
-              <button
-                class="add-to-cart"
-                style="margin-top: 0.5rem; background-color: #00b894;"
-                onClick={() => handleBorrow(book.id)}
-                disabled={borrowed().includes(book.id)}
+                <button class="add-to-cart" onClick={() => handleAddToCart(book.id)}>
+                  Add to Cart
+                </button>
+              </Show>
+
+              <Show
+                when={!borrowed().includes(book.id)}
+                fallback={
+                  <button
+                    class="add-to-cart"
+                    disabled
+                    style="margin-top: 0.5rem; background-color: #00b894;"
+                  >
+                    Borrowed
+                  </button>
+                }
               >
-                {borrowed().includes(book.id) ? "Borrowed" : "Borrow"}
-              </button>
+                <button
+                  class="add-to-cart"
+                  style="margin-top: 0.5rem; background-color: #00b894;"
+                  onClick={() => handleBorrow(book.id)}
+                >
+                  Borrow
+                </button>
+              </Show>
             </div>
           </div>
         ))}
