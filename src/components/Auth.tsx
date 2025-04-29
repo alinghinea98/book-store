@@ -21,7 +21,7 @@ const AuthForm: Component = () => {
 
     if (email() && password()) {
       localStorage.setItem('user', JSON.stringify({ email: email() }));
-      globalThis.location.href = '/dashboard';
+      globalThis.location.href = '/books';
     } else {
       setErrorMessage("Please enter both email and password");
     }

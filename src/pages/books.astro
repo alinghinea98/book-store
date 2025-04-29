@@ -1,0 +1,11 @@
+---
+import Layout from '../layouts/Layout.astro';
+import BooksStore from '../components/Books';
+import '../styles/books.css';
+---
+
+<Layout title="Books - Book Store">
+  <main>
+    <BooksStore client:load />
+  </main>
+</Layout>
