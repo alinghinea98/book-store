@@ -2,6 +2,10 @@
   "compilerOptions": {
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "types": ["astro/client", "solid-js"]
+    "types": ["astro/client", "solid-js"],
+    "target": "ES2015",
+    "lib": ["DOM", "ES2015"],
+    "module": "ESNext",
+    "moduleResolution": "Node",
   }
 }
