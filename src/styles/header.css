@@ -1,0 +1,25 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f8f8;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #ddd;
+    height: 40px;
+  }
+  
+  .logo-small {
+    height: 40px;
+  }
+  
+  .icon-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .icon-button:hover {
+    opacity: 0.75;
+  }
+  
