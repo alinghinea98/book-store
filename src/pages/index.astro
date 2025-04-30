@@ -1,15 +1,39 @@
 ---
-// src/pages/index.astro
-import WelcomePage from '../components/Welcome';
 import Layout from '../layouts/Layout.astro';
 import '../styles/welcome.css';
 ---
 
 <Layout title="Welcome to My App">
-	<head>
-	  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	</head>
-	<main>
-	  <WelcomePage client:load />
-	</main>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <main>
+        <div class="welcome-container">
+            <div class="content-box">
+                <div class="logo-wrapper">
+                    <img
+                            src="/assets/book-store.png"
+                            alt="App Logo"
+                            class="logo"
+                    />
+                </div>
+                <h1 class="welcome-title">Welcome to our Book Store</h1>
+                <p class="welcome-message">
+                    Sign in to your account or create a new one to get started
+                </p>
+                <div class="action-buttons">
+                    <button
+                            class="button login-button"
+                            onclick="window.location.href = '/auth'">
+                        <span class="button-text">Login</span>
+                    </button>
+                    <button
+                            class="button register-button"
+                            onclick="window.location.href = '/auth?tab=register'">
+                        <span class="button-text">Register</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
 </Layout>
