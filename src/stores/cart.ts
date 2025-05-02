@@ -1,62 +1,43 @@
-import { createSignal, createResource } from "solid-js";
+import { createSignal } from "solid-js";
 
 export const [cartItems, setCartItems] = createSignal<number[]>([]);
 
-export const addToCart = async (id: number) => {
-  if (cartItems().includes(id)) return;
-  
-  setCartItems([...cartItems(), id]);
-  
-  try {
-    await fetch("/api/cart", {
-      method: "POST",
-      body: JSON.stringify({ id }),
-      headers: { "Content-Type": "application/json" }
-    });
-  } catch (error) {
-    setCartItems(cartItems().filter(itemId => itemId !== id));
+export const addToCart = (id: number) => {
+  if (!cartItems().includes(id)) {
+    setCartItems([...cartItems(), id]);
   }
 };
 
-export const removeFromCart = async (id: number) => {
-  const prevItems = cartItems();
-  
+export const removeFromCart = (id: number) => {
   setCartItems(cartItems().filter(itemId => itemId !== id));
-  
-  try {
-    await fetch("/api/cart", {
-      method: "DELETE",
-      body: JSON.stringify({ id }),
-      headers: { "Content-Type": "application/json" }
-    });
-  } catch (error) {
-    setCartItems(prevItems);
-  }
+};
+
+export const clearCart = () => {
+  setCartItems([]);
 };
 
 export const fetchCartItemsFromApi = async () => {
-  try {
-    const base = import.meta.env.SITE ?? "http://localhost:4321";
-    const res = await fetch(`${base}/api/cart`);
-    const items = await res.json();
-    setCartItems(items);
-    return items;
-  } catch (error) {
-    console.error("Failed to fetch cart items:", error);
-    return [];
+  return cartItems();
+}
+
+export const checkout = async () => {
+  const items = cartItems(); 
+
+  if (items.length === 0) {
+    return { success: false, message: "Cart is empty." };
   }
-};
 
-export const [cartResource] = createResource(fetchCartItemsFromApi);
-
-export const clearCart = async () => {
   try {
-    await fetch("/api/cart/clear", {
+    const res = await fetch("/api/checkout", {
       method: "POST",
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items })
     });
-    setCartItems([]);
+    const data = await res.json();
+    if (data.success) clearCart();
+    return data;
   } catch (error) {
-    console.error("Failed to clear cart:", error);
+    console.error("Checkout error:", error);
+    return { success: false, message: "Checkout failed." };
   }
 };

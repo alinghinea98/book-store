@@ -7,7 +7,7 @@ import {
   createSignal,
   Accessor,
 } from "solid-js";
-import { cartItems, removeFromCart } from "../stores/cart";
+import { cartItems, clearCart, removeFromCart } from "../stores/cart";
 import { Book } from "../services/BooksService";
 
 interface CartModalProps {
@@ -44,15 +44,28 @@ const CartModal: Component<CartModalProps> = (props) => {
   };
 
   const handleCheckout = async () => {
-    await fetch("/api/checkout", {
+    const items = cartItems();
+    if (items.length === 0) {
+      alert("Your cart is empty!");
+      return;
+    }
+    const res = await fetch("/api/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items })
     });
 
-    const { clearCart } = await import("../stores/cart");
-    await clearCart();
+    const data = await res.json();
+
+    if (data.success) {
+      clearCart();
+      alert("Checkout successful!");
+    } else {
+      alert("Checkout failed: " + data.message);
+    }
     props.onClose();
   };
+
 
   const filteredCartBooks = () =>
     (cartBooks() || []).filter((book) => cartItems().includes(book.id));
